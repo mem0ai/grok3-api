@@ -1,6 +1,6 @@
 # Grok3 API
 
-Grok3 is cool, smart, and useful, but there is no official API available. This is an **unofficial Python client** for interacting with the Grok 3 API. It leverages cookies from browser requests to authenticate and access the API endpoints.
+Grok3 is cool, smart, and useful, but there is no official API available. This is an **unofficial Python client** for interacting with the Grok 3 API. It leverages cookies from browser requests to authenticate and access the API endpoints. The API also provides OpenAI-compatible endpoints for easy integration with existing applications.
 
 ---
 
@@ -49,9 +49,11 @@ Example cookie string from a curl command:
 
 ### 4. Use the Client
 
+#### 4.1 Direct Client Usage
+
 Pass the extracted cookie values to the GrokClient and send a message:
 
-```
+```python
 from grok_client import GrokClient
 
 # Your cookie values
@@ -70,6 +72,64 @@ client = GrokClient(cookies)
 response = client.send_message("write a poem")
 print(response)
 ```
+
+#### 4.2 OpenAI-Compatible API Server
+
+The package includes an OpenAI-compatible API server that allows you to use Grok with any OpenAI-compatible client library or application.
+
+##### Start the Server
+
+1. Create a `.env` file in the project directory using the provided `.env.example` template:
+```bash
+cp grok_client/.env.example .env
+```
+
+2. Update the `.env` file with your Grok cookie values:
+```env
+GROK_SSO=your_sso_cookie
+GROK_SSO_RW=your_sso_rw_cookie
+# Optional configurations
+API_HOST=127.0.0.1
+API_PORT=8000
+MODEL_NAME=grok-3
+```
+
+3. Start the API server:
+```bash
+uvicorn grok_client.server:app --reload --host 0.0.0.0 --port 8000
+```
+
+##### Use with OpenAI Python Client
+
+```python
+from openai import OpenAI
+
+# Initialize client pointing to local server
+client = OpenAI(
+    base_url="http://localhost:8000/v1",
+    api_key="dummy-key"  # Any non-empty string will work
+)
+
+# Create a chat completion
+response = client.chat.completions.create(
+    model="grok-3",  # Model name can be configured in .env
+    messages=[
+        {"role": "user", "content": "Hello, how can you help me?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+##### Interactive Chat Script
+
+The package includes an interactive chat script that uses the OpenAI-compatible endpoint:
+
+```bash
+python grok_client/interactive.py
+```
+
+This provides a command-line interface for chatting with Grok using the OpenAI-compatible API.
 
 ### 5. Optional: Add Memory with Mem0
 
