@@ -30,7 +30,7 @@ class GrokClient:
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "same-origin",
             "sec-gpc": "1",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+            "user-agent": ""PostmanRuntime/7.32.3""
         }
 
     def _prepare_payload(self, message):
