@@ -135,6 +135,16 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+pyenv/
+*.env
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# Specstory
+.specstory/
 
 # Spyder project settings
 .spyderproject
